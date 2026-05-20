@@ -1,17 +1,12 @@
 # Pose Matching
 
-Silhouette-based pose matching prototype for a live camera installation. A
-person stands in front of a depth camera, and the system reports how well
-their silhouette matches a reference pose, in real time.
+Silhouette-based pose matching prototype for a live camera installation.
 
 The matcher works entirely on **binary mask shape** — no skeleton tracking,
-no keypoint detection. This makes it cheap, deterministic, and forgiving of
-lighting / clothing / depth noise.
+no keypoint detection.
 
 The project runs inside **TouchDesigner** as a set of Script TOPs that wrap
-NumPy + OpenCV code, plus one GLSL helper. The Femto Bolt depth stream is
-the eventual live input; in the current state the pipeline is driven by
-still reference images for tuning and validation.
+NumPy + OpenCV
 
 ---
 
@@ -56,20 +51,6 @@ before reaching a matcher.
                                               ├──►  matcher  ──►  match_score
 [Ref silhouette]   ──►  pose_preprocess.py  ──┘
 ```
-
-An optional GLSL crop step (`crop_to_edge.frag`) can be inserted upstream of
-preprocessing to strip excess black padding from a reference image.
-
-### Stage 0 — Optional GLSL crop (`crop_to_edge.frag`)
-
-Auto-crops a thresholded silhouette to its tight bounding box and fits the
-result into the output frame with aspect ratio preserved (letterboxed).
-Useful for reference images that have a lot of empty padding.
-
-Cost is `O(SCAN_RES²)` texture taps per output pixel. `SCAN_RES = 64` is
-fine for static reference images. For live every-frame input either drop
-`SCAN_RES` to ~24–32 or replace the scan with bbox uniforms from an
-`analyzeTOP` (see the comments at the bottom of the shader).
 
 ### Stage 1 — Preprocessing (`pose_preprocess.py`)
 
