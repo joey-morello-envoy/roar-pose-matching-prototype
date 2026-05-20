@@ -1,0 +1,20 @@
+# Pose-matching prototype dependencies
+# See docs/hu_moments_pose_matching_engineering_plan.md
+#
+# Install via TDPyEnvManager: pulse "Create from requirements.txt"
+# Or via CLI: .venv\Scripts\python.exe -m pip install -r requirements.txt
+#
+# Python 3.11.10 (inherited from TD bundled Python). The vEnv is first on
+# sys.path so any package installed here shadows TD's bundled copy.
+# numpy is pulled in transitively by opencv-python; pinning to 2.x for
+# binary compatibility with TD's bundled extensions.
+
+# Phase 1 — reference library + matching algorithm
+numpy>=2.1,<3.0
+opencv-python>=4.10,<5.0
+
+# Phase 2 — Femto Bolt depth capture
+# pyorbbecsdk is not on PyPI; install the matching wheel from
+# https://github.com/orbbec/pyorbbecsdk/releases (cp311-win_amd64)
+# Example:
+#   .venv\Scripts\python.exe -m pip install path\to\pyorbbecsdk-X.Y.Z-cp311-cp311-win_amd64.whl
