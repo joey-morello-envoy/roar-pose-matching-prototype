@@ -479,7 +479,7 @@ def _print_debug(iou_matrix: np.ndarray,
 	      differ) are labeled explicitly.
 	    - The final pass/fail verdict and overall score.
 	"""
-	clear()  # wipe textport before printing
+	# clear()  # wipe textport before printing
 
 	print('IoU matrix target(row) x candidate(col):')
 	if iou_matrix.size == 0:
@@ -586,6 +586,14 @@ def onCook(scriptOp: scriptTOP):
 	scriptOp.store('pairwise_mirrored', result['pairwise_mirrored'])
 	scriptOp.store('num_target_people', len(target_masks))
 	scriptOp.store('num_candidate_people', len(candidate_masks))
+
+	# update pose status UI
+	pose_status = op('pose_status')
+	pose_status.par["text"] = f'POSE: {"MATCH" if passed else "NO MATCH"}  {overall:0.3f}'
+	font_color = (0.0, 1.0, 0.1764) if passed else (1.0, 0.0, 0.5529)
+	pose_status.par.fontcolorr = font_color[0]
+	pose_status.par.fontcolorg = font_color[1]
+	pose_status.par.fontcolorb = font_color[2]
 
 	# (5) Debug print. We dedupe by (pass/fail, target count, candidate
 	# count) so the textport doesn't flood when nothing meaningful has
